@@ -1,0 +1,57 @@
+<!-- templates/request_app/admin_panel.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Admin Panel - Request Management System</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid mt-5">
+        <h1 class="mb-4">Admin Panel - Request Management System</h1>
+        <div>
+            <h2>Pending Requests</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in pending_requests %}
+                            <tr>
+                                <td>{{ request.Name }}</td>
+                                <td>{{ request.Phone }}</td>
+                                <td>{{ request.Email }}</td>
+                                <td>{{ request.Location }}</td>
+                                <td>{{ request.Message }}</td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <form action="{% url 'approv' request.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success mr-2">Approve</button>
+                                        </form>
+                                        <form action="{% url 'rejected' request.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Reject</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7">No pending requests</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
